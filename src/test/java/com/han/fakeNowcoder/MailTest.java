@@ -1,6 +1,5 @@
 package com.han.fakeNowcoder;
 
-
 import com.han.fakeNowcoder.util.MailClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,27 +15,24 @@ import org.thymeleaf.context.Context;
 @ContextConfiguration(classes = FakeNowcoderApplication.class)
 public class MailTest {
 
-    @Autowired
-    private MailClient mailClient;
+  @Autowired private MailClient mailClient;
 
-    @Autowired
-    private TemplateEngine templateEngine;
+  @Autowired private TemplateEngine templateEngine;
 
-    @Test
-    public void testTextMail() {
-        mailClient.sendMail("hanyi98@qq.com", "TEST", "A test mail!");
-    }
+  @Test
+  public void testTextMail() {
+    mailClient.sendMail("yicircle98@gmail.com", "TEST", "A test mail!");
+  }
 
-    @Test
-    public void testHtmlMail() {
-        Context context = new Context();
-        context.setVariable("username", "Yi");
+  @Test
+  public void testHtmlMail() {
+    Context context = new Context();
+    context.setVariable("username", "Yi");
 
-        String content = templateEngine.process("/mail/demo", context);
+    String content = templateEngine.process("/mail/demo", context);
 
-        System.out.println(content);
+    System.out.println(content);
 
-        mailClient.sendMail("hanyi98@qq.com", "HTML", content);
-    }
-
+    mailClient.sendMail("yicircle98@gmail.com", "HTML", content);
+  }
 }
