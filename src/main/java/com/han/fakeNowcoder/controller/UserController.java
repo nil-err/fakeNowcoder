@@ -99,6 +99,23 @@ public class UserController {
     }
   }
 
+  @RequestMapping(path = "/updatePassword", method = RequestMethod.POST)
+  public String updatePassword(Model model, String password, String newPassword) {
+    if (StringUtils.isBlank(password)) {
+      model.addAttribute("passError", "密码错误！");
+      return "/site/setting";
+    }
+    User user = hostHolder.getUser();
+    password = CommunityUtil.md5(password + user.getSalt());
+    if (!password.equals(user.getPassword())) {
+      model.addAttribute("passError", "密码错误！");
+      return "/site/setting";
+    }
+    newPassword = CommunityUtil.md5(newPassword + user.getSalt());
+    userService.updatePassword(user.getId(), newPassword);
+    return "redirect:/index";
+  }
+
   @RequestMapping(path = "/profile", method = RequestMethod.GET)
   public String getProfilePage() {
     return "/site/profile";
