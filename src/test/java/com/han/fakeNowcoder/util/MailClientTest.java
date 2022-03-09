@@ -1,7 +1,7 @@
-package com.han.fakeNowcoder;
+package com.han.fakeNowcoder.util;
 
-import com.han.fakeNowcoder.util.MailClient;
-import org.junit.Test;
+import com.han.fakeNowcoder.FakeNowcoderApplication;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +13,10 @@ import org.thymeleaf.context.Context;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = FakeNowcoderApplication.class)
-public class MailTest {
+class MailClientTest {
+
+  @Test
+  void sendMail() {}
 
   @Autowired private MailClient mailClient;
 

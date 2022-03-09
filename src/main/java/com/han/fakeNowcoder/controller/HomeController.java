@@ -1,6 +1,5 @@
 package com.han.fakeNowcoder.controller;
 
-
 import com.han.fakeNowcoder.entity.DiscussPost;
 import com.han.fakeNowcoder.entity.Page;
 import com.han.fakeNowcoder.entity.User;
@@ -17,35 +16,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author imhan
+ */
 @Controller
 public class HomeController {
 
-    @Autowired
-    private DiscussPostService discussPostService;
+  @Autowired private DiscussPostService discussPostService;
 
-    @Autowired
-    private UserService userService;
+  @Autowired private UserService userService;
 
-    @RequestMapping(path = "/index", method = RequestMethod.GET)
-    public String getIndexPage(Model model, Page page) {
-        // 方法调用之前，SpringMVC会自动实例化Model和Page，并自动将Page诸如Model
-        // 因此，在thymeleaf中可以直接访问Page对象，无需手动将Page对象注入Model
-        // model.addAttribute("page", page);
-        page.setRows(discussPostService.findDiscussPostRows(0));
-        page.setPath("/index");
+  @RequestMapping(path = "/index", method = RequestMethod.GET)
+  public String getIndexPage(Model model, Page page) {
+    // 方法调用之前，SpringMVC会自动实例化Model和Page，并自动将Page诸如Model
+    // 因此，在thymeleaf中可以直接访问Page对象，无需手动将Page对象注入Model
+    // 即 model.addAttribute("page", page);
+    page.setRows(discussPostService.findDiscussPostRows(0));
+    page.setPath("/index");
 
-        List<DiscussPost> list = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
-        List<Map<String, Object>> discussPosts = new ArrayList<>();
-        if (list != null) {
-            for (DiscussPost discussPost : list) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("post", discussPost);
-                User user = userService.findUserById(discussPost.getUserId());
-                map.put("user", user);
-                discussPosts.add(map);
-            }
-        }
-        model.addAttribute("discussPosts", discussPosts);
-        return "/index";
+    List<DiscussPost> list =
+        discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
+    List<Map<String, Object>> discussPosts = new ArrayList<>();
+    if (list != null) {
+      for (DiscussPost discussPost : list) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("post", discussPost);
+        User user = userService.findUserById(discussPost.getUserId());
+        map.put("user", user);
+        discussPosts.add(map);
+      }
     }
+    model.addAttribute("discussPosts", discussPosts);
+    return "/index";
+  }
 }

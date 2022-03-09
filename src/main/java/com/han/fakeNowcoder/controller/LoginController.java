@@ -4,16 +4,20 @@ import com.google.code.kaptcha.Producer;
 import com.han.fakeNowcoder.entity.User;
 import com.han.fakeNowcoder.service.UserService;
 import com.han.fakeNowcoder.util.CommunityCostant;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
@@ -21,10 +25,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
+/**
+ * @author imhan
+ */
 @Controller
 public class LoginController implements CommunityCostant {
 
   private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+
+  @Value("${nowcoderCustom.path.domain}")
+  private String domain;
+
+  @Value("${server.servlet.context-path}")
+  private String contextPath;
 
   @Autowired private UserService userService;
 
@@ -35,6 +48,42 @@ public class LoginController implements CommunityCostant {
     return "/site/login";
   }
 
+  @RequestMapping(path = "/login", method = RequestMethod.POST)
+  public String login(
+      Model model,
+      String username,
+      String password,
+      String code,
+      boolean rememberMe,
+      HttpSession session,
+      HttpServletResponse response) {
+    String kaptcha = (String) session.getAttribute("kaptcha");
+    if (StringUtils.isBlank(kaptcha)
+        || StringUtils.isBlank(code)
+        || !kaptcha.equalsIgnoreCase(code)) {
+      model.addAttribute("codeMsg", "验证码不正确！");
+      return "/site/login";
+    }
+    long expiredSeconds = rememberMe ? REMEMBER_EXPIRED_SECONDS : DEFAULT_EXPIRED_SECONDS;
+    Map<String, Object> map = userService.login(username, password, expiredSeconds);
+    if (map.containsKey("ticket")) {
+      Cookie cookie = new Cookie("ticket", (String) map.get("ticket"));
+      cookie.setPath(contextPath);
+      response.addCookie(cookie);
+      return "redirect:/index";
+    } else {
+      model.addAttribute("usernameMsg", map.get("usernameMsg"));
+      model.addAttribute("passwordMsg", map.get("passwordMsg"));
+      return "/site/login";
+    }
+  }
+
+  @RequestMapping(path = "/logout", method = RequestMethod.GET)
+  public String logout(Model model, @CookieValue("ticket") String ticket) {
+    userService.logout(ticket);
+    return "redirect:/login";
+  }
+
   @RequestMapping(path = "/kaptcha", method = RequestMethod.GET)
   public void getKaptcha(HttpServletResponse response, HttpSession session) {
     // 生成验证码
@@ -42,7 +91,6 @@ public class LoginController implements CommunityCostant {
     BufferedImage image = kaptchaProducer.createImage(text);
     // 验证码存入Session
     session.setAttribute("kaptcha", text);
-    System.out.println(session.getAttribute("kaptcha"));
     // 输出图片给浏览器
     response.setContentType("image/png");
     try (OutputStream outputStream = response.getOutputStream()) {
@@ -72,7 +120,13 @@ public class LoginController implements CommunityCostant {
     }
   }
 
-  // http://locahost:8080/nowcoder/activation/101/code
+  /**
+   * @param model Spring MVC Model
+   * @param userId 路径变量
+   * @param activationCode 路径变量
+   * @return 成功则返回首页，否则跳转到操作结果页
+   *     <p>// http://locahost:8080/nowcoder/activation/101/code
+   */
   @RequestMapping(path = "/activation/{userId}/{activationCode}", method = RequestMethod.GET)
   public String activation(
       Model model,
