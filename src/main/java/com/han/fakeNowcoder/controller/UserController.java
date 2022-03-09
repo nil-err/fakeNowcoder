@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author imhan
@@ -105,23 +106,16 @@ public class UserController {
   @LoginRequired
   @RequestMapping(path = "/updatePassword", method = RequestMethod.POST)
   public String updatePassword(Model model, String password, String newPassword) {
-    if (StringUtils.isBlank(password)) {
-      model.addAttribute("passError", "密码不能为空！");
-      return "/site/setting";
-    }
-    if (StringUtils.isBlank(newPassword)) {
-      model.addAttribute("newPassError", "密码不能为空！");
-      return "/site/setting";
-    }
+
     User user = hostHolder.getUser();
-    password = CommunityUtil.md5(password + user.getSalt());
-    if (!password.equals(user.getPassword())) {
-      model.addAttribute("passError", "密码错误！");
+    Map<String, Object> map = userService.updatePassword(user.getId(), password, newPassword);
+    if (map == null || map.isEmpty()) {
+      return "redirect:/logout";
+    } else {
+      model.addAttribute("passError", map.get("passError"));
+      model.addAttribute("newPassnewPassErrorError", map.get("newPassError"));
       return "/site/setting";
     }
-    newPassword = CommunityUtil.md5(newPassword + user.getSalt());
-    userService.updatePassword(user.getId(), newPassword);
-    return "redirect:/logout";
   }
 
   @LoginRequired

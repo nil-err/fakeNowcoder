@@ -161,7 +161,25 @@ public class UserService implements CommunityCostant {
     return userMapper.updateHeader(userId, headerUrl);
   }
 
-  public int updatePassword(int userId, String newPassword){
-    return userMapper.updatePassword(userId, newPassword);
+  public Map<String, Object> updatePassword(int userId, String password, String newPassword) {
+    Map<String, Object> map = new HashMap<>();
+
+    if (StringUtils.isBlank(password)) {
+      map.put("passError", "密码不能为空！");
+      return map;
+    }
+    if (StringUtils.isBlank(newPassword)) {
+      map.put("newPassError", "密码不能为空！");
+      return map;
+    }
+    User user = userMapper.selectById(userId);
+    password = CommunityUtil.md5(password + user.getSalt());
+    if (!password.equals(user.getPassword())) {
+      map.put("passError", "密码错误！");
+      return map;
+    }
+    newPassword = CommunityUtil.md5(newPassword + user.getSalt());
+    userMapper.updatePassword(userId, newPassword);
+    return map;
   }
 }
