@@ -1,10 +1,13 @@
 package com.han.fakeNowcoder.controller.interceptor;
 
+import com.han.fakeNowcoder.controller.UserController;
 import com.han.fakeNowcoder.entity.LoginTicket;
 import com.han.fakeNowcoder.entity.User;
 import com.han.fakeNowcoder.service.UserService;
 import com.han.fakeNowcoder.util.CookieUtil;
 import com.han.fakeNowcoder.util.HostHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,6 +19,8 @@ import java.util.Date;
 
 @Component
 public class LoginTicketInterceptor implements HandlerInterceptor {
+
+  public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
   @Autowired private UserService userService;
 
