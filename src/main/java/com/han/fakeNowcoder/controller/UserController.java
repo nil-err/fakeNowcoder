@@ -1,5 +1,6 @@
 package com.han.fakeNowcoder.controller;
 
+import com.han.fakeNowcoder.annotation.LoginRequired;
 import com.han.fakeNowcoder.entity.User;
 import com.han.fakeNowcoder.service.UserService;
 import com.han.fakeNowcoder.util.CommunityUtil;
@@ -44,11 +45,13 @@ public class UserController {
 
   @Autowired private HostHolder hostHolder;
 
+  @LoginRequired
   @RequestMapping(path = "/setting", method = RequestMethod.GET)
   public String getSettingPage() {
     return "/site/setting";
   }
 
+  @LoginRequired
   @RequestMapping(path = "/upload", method = RequestMethod.POST)
   public String uploadHeader(MultipartFile headerImage, Model model) {
     if (headerImage == null) {
@@ -99,6 +102,7 @@ public class UserController {
     }
   }
 
+  @LoginRequired
   @RequestMapping(path = "/updatePassword", method = RequestMethod.POST)
   public String updatePassword(Model model, String password, String newPassword) {
     if (StringUtils.isBlank(password)) {
@@ -120,6 +124,7 @@ public class UserController {
     return "redirect:/logout";
   }
 
+  @LoginRequired
   @RequestMapping(path = "/profile", method = RequestMethod.GET)
   public String getProfilePage() {
     return "/site/profile";
