@@ -113,7 +113,7 @@ public class UserController {
     }
     newPassword = CommunityUtil.md5(newPassword + user.getSalt());
     userService.updatePassword(user.getId(), newPassword);
-    return "redirect:/index";
+    return "redirect:/logout";
   }
 
   @RequestMapping(path = "/profile", method = RequestMethod.GET)
