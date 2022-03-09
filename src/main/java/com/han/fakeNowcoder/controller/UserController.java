@@ -102,7 +102,11 @@ public class UserController {
   @RequestMapping(path = "/updatePassword", method = RequestMethod.POST)
   public String updatePassword(Model model, String password, String newPassword) {
     if (StringUtils.isBlank(password)) {
-      model.addAttribute("passError", "密码错误！");
+      model.addAttribute("passError", "密码不能为空！");
+      return "/site/setting";
+    }
+    if (StringUtils.isBlank(newPassword)) {
+      model.addAttribute("newPassError", "密码不能为空！");
       return "/site/setting";
     }
     User user = hostHolder.getUser();
