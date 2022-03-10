@@ -170,7 +170,7 @@ public class LoginController implements CommunityCostant {
     String code = CommunityUtil.generateUUID().substring(0, 4);
     context.setVariable("verifyCode", code);
     String content = templateEngine.process("/mail/forget", context);
-    //    mailClient.sendMail(email, "找回密码", content);
+    mailClient.sendMail(email, "找回密码", content);
 
     // 保存验证码
     session.setAttribute("verifyCode", code);
