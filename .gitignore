@@ -46,3 +46,7 @@ note
 
 ### upload ###
 upload
+
+
+### resource ###
+/src/main/resources/sensitive-words.txt
