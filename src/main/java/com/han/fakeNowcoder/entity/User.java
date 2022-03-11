@@ -2,112 +2,140 @@ package com.han.fakeNowcoder.entity;
 
 import java.util.Date;
 
+/**
+ * @author imhan
+ */
 public class User {
 
-    private int id;
-    private String username;
-    private String password;
-    private String salt;
-    private String email;
-    private int type;
-    private int status;
-    private String activationCode;
-    private String headerUrl;
-    private Date createTime;
+  private int id;
 
-    public int getId() {
-        return id;
-    }
+  private String username;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  private String password;
 
-    public String getUsername() {
-        return username;
-    }
+  private String salt;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  private String email;
 
-    public String getPassword() {
-        return password;
-    }
+  private int type;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  private int status;
 
-    public String getSalt() {
-        return salt;
-    }
+  private String activationCode;
 
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
+  private String headerUrl;
 
-    public String getEmail() {
-        return email;
-    }
+  private Date createTime;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public int getType() {
-        return type;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public void setType(int type) {
-        this.type = type;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public int getStatus() {
-        return status;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public String getActivationCode() {
-        return activationCode;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public void setActivationCode(String activationCode) {
-        this.activationCode = activationCode;
-    }
+  public String getSalt() {
+    return salt;
+  }
 
-    public String getHeaderUrl() {
-        return headerUrl;
-    }
+  public void setSalt(String salt) {
+    this.salt = salt;
+  }
 
-    public void setHeaderUrl(String headerUrl) {
-        this.headerUrl = headerUrl;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public Date getCreatTime() {
-        return createTime;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public void setCreatTime(Date creatTime) {
-        this.createTime = creatTime;
-    }
+  public int getType() {
+    return type;
+  }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
-                ", email='" + email + '\'' +
-                ", type=" + type +
-                ", status=" + status +
-                ", activationCode='" + activationCode + '\'' +
-                ", headerUrl='" + headerUrl + '\'' +
-                ", creatTime=" + createTime +
-                '}';
-    }
+  public void setType(int type) {
+    this.type = type;
+  }
+
+  public int getStatus() {
+    return status;
+  }
+
+  public void setStatus(int status) {
+    this.status = status;
+  }
+
+  public String getActivationCode() {
+    return activationCode;
+  }
+
+  public void setActivationCode(String activationCode) {
+    this.activationCode = activationCode;
+  }
+
+  public String getHeaderUrl() {
+    return headerUrl;
+  }
+
+  public void setHeaderUrl(String headerUrl) {
+    this.headerUrl = headerUrl;
+  }
+
+  public Date getCreatTime() {
+    return createTime;
+  }
+
+  public void setCreatTime(Date creatTime) {
+    this.createTime = creatTime;
+  }
+
+  @Override
+  public String toString() {
+    return "User{"
+        + "id="
+        + id
+        + ", username='"
+        + username
+        + '\''
+        + ", password='"
+        + password
+        + '\''
+        + ", salt='"
+        + salt
+        + '\''
+        + ", email='"
+        + email
+        + '\''
+        + ", type="
+        + type
+        + ", status="
+        + status
+        + ", activationCode='"
+        + activationCode
+        + '\''
+        + ", headerUrl='"
+        + headerUrl
+        + '\''
+        + ", creatTime="
+        + createTime
+        + '}';
+  }
 }

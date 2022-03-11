@@ -7,87 +7,90 @@ package com.han.fakeNowcoder.entity;
  */
 public class Page {
 
-    // 当前页码
-    private int current = 1;
-    // 显示上限
-    private int limit = 10;
-    // 数据总数（计算总页数）
-    private int rows;
-    // 查询路径 （用于复用分页链接）
-    private String path;
+  /** 当前页码 */
+  private int current = 1;
 
-    public int getCurrent() {
-        return current;
-    }
+  /** 显示上限 */
+  private int limit = 10;
 
-    public void setCurrent(int current) {
-        if (current >= 1) {
-            this.current = current;
-        }
-    }
+  /** 数据总数（计算总页数） */
+  private int rows;
 
-    public int getLimit() {
-        return limit;
-    }
+  /** 查询路径 （用于复用分页链接） */
+  private String path;
 
-    public void setLimit(int limit) {
-        if (limit >= 1 && limit <= 100) {
-            this.limit = limit;
-        }
-    }
+  public int getCurrent() {
+    return current;
+  }
 
-    public int getRows() {
-        return rows;
+  public void setCurrent(int current) {
+    if (current >= 1) {
+      this.current = current;
     }
+  }
 
-    public void setRows(int rows) {
-        if (rows >= 0) {
-            this.rows = rows;
-        }
-    }
+  public int getLimit() {
+    return limit;
+  }
 
-    public String getPath() {
-        return path;
+  public void setLimit(int limit) {
+    if (limit >= 1 && limit <= 100) {
+      this.limit = limit;
     }
+  }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
+  public int getRows() {
+    return rows;
+  }
 
-    /**
-     * 获取当前页的起始行
-     *
-     * @return 返回当前页current 在 limit 条件下的起始行
-     */
-    public int getOffset() {
-        return (current - 1) * limit;
+  public void setRows(int rows) {
+    if (rows >= 0) {
+      this.rows = rows;
     }
+  }
 
-    /**
-     * @return 返回在当前 limit 下总页数
-     */
-    public int getTotalPagesNum() {
-        if ((rows & limit) == 0) {
-            return rows / limit;
-        } else {
-            return rows / limit + 1;
-        }
-    }
+  public String getPath() {
+    return path;
+  }
 
-    /**
-     * @return 起始页码，即离 current 最近的 X 页
-     */
-    public int getFrom() {
-        int from = current - 2;
-        return from < 1 ? 1 : from;
-    }
+  public void setPath(String path) {
+    this.path = path;
+  }
 
-    /**
-     * @return 终止页码，即离 current 最近的 X 页
-     */
-    public int getTo() {
-        int to = current + 2;
-        int total = getTotalPagesNum();
-        return to > total ? total : to;
+  /**
+   * 获取当前页的起始行
+   *
+   * @return 返回当前页current 在 limit 条件下的起始行
+   */
+  public int getOffset() {
+    return (current - 1) * limit;
+  }
+
+  /**
+   * @return 返回在当前 limit 下总页数
+   */
+  public int getTotalPagesNum() {
+    if ((rows & limit) == 0) {
+      return rows / limit;
+    } else {
+      return rows / limit + 1;
     }
+  }
+
+  /**
+   * @return 起始页码，即离 current 最近的 X 页
+   */
+  public int getFrom() {
+    int from = current - 2;
+    return Math.max(from, 1);
+  }
+
+  /**
+   * @return 终止页码，即离 current 最近的 X 页
+   */
+  public int getTo() {
+    int to = current + 2;
+    int total = getTotalPagesNum();
+    return Math.min(to, total);
+  }
 }
