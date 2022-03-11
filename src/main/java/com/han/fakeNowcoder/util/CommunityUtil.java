@@ -1,12 +1,15 @@
 package com.han.fakeNowcoder.util;
 
-import net.minidev.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
 
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * @author imhan
+ */
 public class CommunityUtil {
 
   /**
@@ -42,7 +45,7 @@ public class CommunityUtil {
     return getJSONString(code, msg, null);
   }
 
-  public static String getJSONString(int code){
+  public static String getJSONString(int code) {
     return getJSONString(code, null, null);
   }
 }

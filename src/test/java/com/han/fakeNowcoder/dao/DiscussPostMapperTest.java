@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -30,5 +31,22 @@ class DiscussPostMapperTest {
   void selectDiscussPostRows() {
     int rows = discussPostMapper.selectDiscussPostRows(149);
     System.out.println(rows);
+  }
+
+  @Test
+  void insertDiscussPost() {
+    String title = "111";
+    String content = "11111";
+    int userId = 154;
+    DiscussPost discussPost = new DiscussPost();
+    discussPost.setUserId(userId);
+    discussPost.setTitle(title);
+    discussPost.setContent(content);
+    discussPost.setType(0);
+    discussPost.setStatus(0);
+    discussPost.setCreateTime(new Date());
+    discussPost.setCommentCount(0);
+    discussPost.setScore(0);
+    discussPostMapper.insertDiscussPost(discussPost);
   }
 }
