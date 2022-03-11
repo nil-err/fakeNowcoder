@@ -92,7 +92,7 @@ public class UserController {
     String suffix = filename.substring(filename.lastIndexOf("."));
     response.setContentType("image/" + suffix);
     try (ServletOutputStream outputStream = response.getOutputStream();
-        FileInputStream fileInputStream = new FileInputStream(file); ) {
+        FileInputStream fileInputStream = new FileInputStream(file)) {
       byte[] buffer = new byte[1024];
       int b = 0;
       while ((b = fileInputStream.read(buffer)) != -1) {

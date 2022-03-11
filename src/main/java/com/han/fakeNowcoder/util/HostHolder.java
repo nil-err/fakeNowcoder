@@ -9,17 +9,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class HostHolder {
 
-    private ThreadLocal<User> userThreadLocal = new ThreadLocal<>();
+  private final ThreadLocal<User> userThreadLocal = new ThreadLocal<>();
 
-    public void setUser(User user) {
-        userThreadLocal.set(user);
-    }
+  public void setUser(User user) {
+    userThreadLocal.set(user);
+  }
 
-    public User getUser(){
-        return userThreadLocal.get();
-    }
+  public User getUser() {
+    return userThreadLocal.get();
+  }
 
-    public void clear(){
-        userThreadLocal.remove();
-    }
+  public void clear() {
+    userThreadLocal.remove();
+  }
 }

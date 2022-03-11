@@ -22,7 +22,7 @@ public class SensitiveFilter {
     // 是否是敏感词结束位置
     private boolean isKeywordEnd = false;
     // 子节点(子节点字符，子节点)
-    private Map<Character, TrieNode> children = new HashMap<>();
+    private final Map<Character, TrieNode> children = new HashMap<>();
 
     public boolean isKeywordEnd() {
       return isKeywordEnd;
