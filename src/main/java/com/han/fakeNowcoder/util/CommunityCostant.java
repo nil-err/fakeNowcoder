@@ -12,4 +12,8 @@ public interface CommunityCostant {
   long DEFAULT_EXPIRED_SECONDS = 3600 * 12;
   /** 记住登录超时时间 */
   long REMEMBER_EXPIRED_SECONDS = 3600 * 24 * 30;
+  /** 实体类型： 帖子 */
+  int ENTITY_TYPE_POST = 1;
+  /** 实体类型： 评论 */
+  int ENTITY_TYPE_COMMENT = 2;
 }
