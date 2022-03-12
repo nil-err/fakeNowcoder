@@ -32,6 +32,6 @@ public interface MessageMapper {
   /** 新增消息 */
   int insertMessage(@Param("message") Message message);
 
-  /** 修改消息已读状态 */
+  /** 修改消息状态 */
   int updateStatus(@Param("ids") List<Integer> ids, @Param("status") int status);
 }

@@ -96,7 +96,7 @@ public class MessageController {
     model.addAttribute("target", getMessageTarget(conversationId));
 
     List<Integer> unreadMessageIds = getUnreadMessageIds(messages);
-    if (unreadMessageIds != null) {
+    if (!unreadMessageIds.isEmpty()) {
       messageService.readStatus(unreadMessageIds);
     }
 
@@ -150,6 +150,13 @@ public class MessageController {
 
     messageService.addMessage(message);
 
+    return CommunityUtil.getJSONString(0);
+  }
+
+  @RequestMapping(path = "/delete", method = RequestMethod.GET)
+  @ResponseBody
+  public String deleteMessage(int id) {
+    messageService.deleteMessage(id);
     return CommunityUtil.getJSONString(0);
   }
 }
