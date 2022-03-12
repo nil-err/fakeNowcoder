@@ -183,10 +183,6 @@ public class UserService implements CommunityCostant {
     return map;
   }
 
-  public User findUserByName(String username) {
-    return userMapper.selectByName(username);
-  }
-
   // 重置密码
   public Map<String, Object> resetPassword(String email, String password) {
     Map<String, Object> map = new HashMap<>();
@@ -216,4 +212,7 @@ public class UserService implements CommunityCostant {
     return map;
   }
 
+  public User findUserByName(String username) {
+    return userMapper.selectByName(username);
+  }
 }

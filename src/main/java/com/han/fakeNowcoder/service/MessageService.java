@@ -2,8 +2,10 @@ package com.han.fakeNowcoder.service;
 
 import com.han.fakeNowcoder.dao.MessageMapper;
 import com.han.fakeNowcoder.entity.Message;
+import com.han.fakeNowcoder.util.SensitiveFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -11,6 +13,8 @@ import java.util.List;
 public class MessageService {
 
   @Autowired private MessageMapper messageMapper;
+
+  @Autowired private SensitiveFilter sensitiveFilter;
 
   /** 查询会话列表,每个会话只有最后一条私信 */
   public List<Message> findConversations(int userId, int offset, int limit) {
@@ -35,5 +39,17 @@ public class MessageService {
   /** 查询未读私信数量 */
   public int findUnreadMessagesCount(int userId, String conversationId) {
     return messageMapper.selectUnreadMessagesCount(userId, conversationId);
+  }
+
+  /** 新增消息 */
+  public int addMessage(Message message) {
+    message.setContent((HtmlUtils.htmlEscape(message.getContent())));
+    message.setContent(sensitiveFilter.filter(message.getContent()));
+    return messageMapper.insertMessage(message);
+  }
+
+  /** 修改消息已读状态 */
+  public int readStatus(List<Integer> ids) {
+    return messageMapper.updateStatus(ids, 1);
   }
 }

@@ -5,6 +5,7 @@ import com.han.fakeNowcoder.entity.Page;
 import com.han.fakeNowcoder.entity.User;
 import com.han.fakeNowcoder.service.MessageService;
 import com.han.fakeNowcoder.service.UserService;
+import com.han.fakeNowcoder.util.CommunityUtil;
 import com.han.fakeNowcoder.util.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,11 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping(path = "/message")
@@ -109,5 +108,30 @@ public class MessageController {
     } else {
       return userService.findUserById(userId0);
     }
+  }
+
+  @RequestMapping(path = "/send", method = RequestMethod.POST)
+  @ResponseBody
+  public String sendMessage(String toName, String content) {
+    User fromUser = hostHolder.getUser();
+    User toUser = userService.findUserByName(toName);
+    if (toUser == null) {
+      return CommunityUtil.getJSONString(1, "目标对象不存在");
+    }
+    Message message = new Message();
+    message.setContent(content);
+    message.setToId(toUser.getId());
+    message.setFromId(fromUser.getId());
+    message.setStatus(0);
+    message.setCreateTime(new Date());
+    if (toUser.getId() < fromUser.getId()) {
+      message.setConversationId(toUser.getId() + "_" + fromUser.getId());
+    } else {
+      message.setConversationId(fromUser.getId() + "_" + toUser.getId());
+    }
+
+    messageService.addMessage(message);
+
+    return CommunityUtil.getJSONString(0);
   }
 }
