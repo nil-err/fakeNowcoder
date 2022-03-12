@@ -95,6 +95,11 @@ public class MessageController {
     model.addAttribute("messageList", messageList);
     model.addAttribute("target", getMessageTarget(conversationId));
 
+    List<Integer> unreadMessageIds = getUnreadMessageIds(messages);
+    if (unreadMessageIds != null) {
+      messageService.readStatus(unreadMessageIds);
+    }
+
     return "/site/letter-detail";
   }
 
@@ -108,6 +113,19 @@ public class MessageController {
     } else {
       return userService.findUserById(userId0);
     }
+  }
+
+  private List<Integer> getUnreadMessageIds(List<Message> messages) {
+    User user = hostHolder.getUser();
+    List<Integer> ids = new ArrayList<>();
+    if (messages != null) {
+      for (Message message : messages) {
+        if (user.getId() == message.getToId() && message.getStatus() == 0) {
+          ids.add(message.getId());
+        }
+      }
+    }
+    return ids;
   }
 
   @RequestMapping(path = "/send", method = RequestMethod.POST)
