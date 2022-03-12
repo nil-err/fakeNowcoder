@@ -70,7 +70,7 @@ public class Page {
    * @return 返回在当前 limit 下总页数
    */
   public int getTotalPagesNum() {
-    if ((rows & limit) == 0) {
+    if ((rows % limit) == 0) {
       return rows / limit;
     } else {
       return rows / limit + 1;
