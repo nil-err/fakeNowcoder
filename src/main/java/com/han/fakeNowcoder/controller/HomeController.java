@@ -4,7 +4,9 @@ import com.han.fakeNowcoder.entity.DiscussPost;
 import com.han.fakeNowcoder.entity.Page;
 import com.han.fakeNowcoder.entity.User;
 import com.han.fakeNowcoder.service.DiscussPostService;
+import com.han.fakeNowcoder.service.LikeService;
 import com.han.fakeNowcoder.service.UserService;
+import com.han.fakeNowcoder.util.CommunityCostant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +24,15 @@ import java.util.Map;
  * @author imhan
  */
 @Controller
-public class HomeController {
+public class HomeController implements CommunityCostant {
 
   public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
   @Autowired private DiscussPostService discussPostService;
 
   @Autowired private UserService userService;
+
+  @Autowired private LikeService likeService;
 
   @RequestMapping(path = "/index", method = RequestMethod.GET)
   public String getIndexPage(Model model, Page page) {
@@ -49,6 +53,8 @@ public class HomeController {
         map.put("post", discussPost);
         User user = userService.findUserById(discussPost.getUserId());
         map.put("user", user);
+        long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, discussPost.getId());
+        map.put("likeCount", likeCount);
         discussPosts.add(map);
       }
     }
