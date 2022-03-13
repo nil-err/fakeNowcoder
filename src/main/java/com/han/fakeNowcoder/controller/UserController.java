@@ -2,6 +2,7 @@ package com.han.fakeNowcoder.controller;
 
 import com.han.fakeNowcoder.annotation.LoginRequired;
 import com.han.fakeNowcoder.entity.User;
+import com.han.fakeNowcoder.service.LikeService;
 import com.han.fakeNowcoder.service.UserService;
 import com.han.fakeNowcoder.util.CommunityUtil;
 import com.han.fakeNowcoder.util.HostHolder;
@@ -45,6 +46,8 @@ public class UserController {
   @Autowired private UserService userService;
 
   @Autowired private HostHolder hostHolder;
+
+  @Autowired private LikeService likeService;
 
   @LoginRequired
   @RequestMapping(path = "/setting", method = RequestMethod.GET)
@@ -118,9 +121,25 @@ public class UserController {
     }
   }
 
-  @LoginRequired
-  @RequestMapping(path = "/profile", method = RequestMethod.GET)
-  public String getProfilePage() {
+  /**
+   * 个人主页
+   *
+   * @param userId
+   * @return
+   */
+  @RequestMapping(path = "/profile/{userId}", method = RequestMethod.GET)
+  public String getProfilePage(@PathVariable("userId") int userId, Model model) {
+    User user = userService.findUserById(userId);
+    if (user == null) {
+      throw new IllegalArgumentException("该用户不存在");
+    }
+
+    // 用户
+    model.addAttribute("user", user);
+    // 获赞数量
+    int obtainedLikeCount = likeService.findUserObtainedLikeCount(userId);
+    model.addAttribute("obtainedLikeCount", obtainedLikeCount);
+
     return "/site/profile";
   }
 }
