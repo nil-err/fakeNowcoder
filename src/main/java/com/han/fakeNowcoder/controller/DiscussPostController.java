@@ -138,14 +138,14 @@ public class DiscussPostController implements CommunityCostant {
 
             // 点赞数量
             likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_COMMENT, reply.getId());
-            commentVo.put("likeCount", likeCount);
+            replyVo.put("likeCount", likeCount);
             // 点赞状态
             likeStatus =
                 holderUser == null
                     ? 0
                     : likeService.finEntityLikeStatusOfUser(
                         holderUser.getId(), ENTITY_TYPE_COMMENT, reply.getId());
-            commentVo.put("likeStatus", likeStatus);
+            replyVo.put("likeStatus", likeStatus);
 
             replyVoList.add(replyVo);
           }
