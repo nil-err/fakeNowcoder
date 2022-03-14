@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.*;
  * @author imhan
  */
 @Mapper
+@Deprecated
 public interface LoginTicketMapper {
 
   /**
