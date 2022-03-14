@@ -120,15 +120,15 @@ class RedisConfigTest {
 
                 operations.multi();
 
-                redisTemplate.opsForSet().add(redisKey, "张飞");
-                redisTemplate.opsForSet().add(redisKey, "关羽");
-                redisTemplate.opsForSet().add(redisKey, "刘备");
-                redisTemplate.opsForSet().add(redisKey, "诸葛亮");
-                redisTemplate.opsForSet().add(redisKey, "周瑜");
-                redisTemplate.opsForSet().add(redisKey, "曹操");
+                operations.opsForSet().add(redisKey, "张飞");
+                operations.opsForSet().add(redisKey, "关羽");
+                operations.opsForSet().add(redisKey, "刘备");
+                operations.opsForSet().add(redisKey, "诸葛亮");
+                operations.opsForSet().add(redisKey, "周瑜");
+                operations.opsForSet().add(redisKey, "曹操");
 
                 /* redis事务中间做查询结果不对，因为在事务提交之后，才会把命令发送给redis服务器执行 */
-                System.out.println(redisTemplate.opsForSet().members(redisKey));
+                System.out.println(operations.opsForSet().members(redisKey));
 
                 return operations.exec();
               }

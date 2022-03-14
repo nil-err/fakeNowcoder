@@ -41,19 +41,19 @@ public class LikeService {
 
             String userObtainedLikeKey = RedisKeyUtil.getUserObtainedLikeKey(entityUserId);
 
-            Boolean liked = redisTemplate.opsForSet().isMember(entityLikeKey, userId);
+            Boolean liked = operations.opsForSet().isMember(entityLikeKey, userId);
 
-            redisTemplate.multi();
+            operations.multi();
 
             if (liked) {
-              redisTemplate.opsForSet().remove(entityLikeKey, userId);
-              redisTemplate.opsForValue().decrement(userObtainedLikeKey);
+              operations.opsForSet().remove(entityLikeKey, userId);
+              operations.opsForValue().decrement(userObtainedLikeKey);
             } else {
-              redisTemplate.opsForSet().add(entityLikeKey, userId);
-              redisTemplate.opsForValue().increment(userObtainedLikeKey);
+              operations.opsForSet().add(entityLikeKey, userId);
+              operations.opsForValue().increment(userObtainedLikeKey);
             }
 
-            return redisTemplate.exec();
+            return operations.exec();
           }
         });
   }

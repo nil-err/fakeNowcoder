@@ -2,8 +2,10 @@ package com.han.fakeNowcoder.controller;
 
 import com.han.fakeNowcoder.annotation.LoginRequired;
 import com.han.fakeNowcoder.entity.User;
+import com.han.fakeNowcoder.service.FollowService;
 import com.han.fakeNowcoder.service.LikeService;
 import com.han.fakeNowcoder.service.UserService;
+import com.han.fakeNowcoder.util.CommunityCostant;
 import com.han.fakeNowcoder.util.CommunityUtil;
 import com.han.fakeNowcoder.util.HostHolder;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +32,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(path = "/user")
-public class UserController {
+public class UserController implements CommunityCostant {
 
   public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -48,6 +50,8 @@ public class UserController {
   @Autowired private HostHolder hostHolder;
 
   @Autowired private LikeService likeService;
+
+  @Autowired private FollowService followService;
 
   @LoginRequired
   @RequestMapping(path = "/setting", method = RequestMethod.GET)
@@ -139,6 +143,22 @@ public class UserController {
     // 获赞数量
     int obtainedLikeCount = likeService.findUserObtainedLikeCount(userId);
     model.addAttribute("obtainedLikeCount", obtainedLikeCount);
+
+    // 关注数量
+    long followeeCount = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
+    model.addAttribute("followeeCount", followeeCount);
+
+    // 粉丝数量
+    long followerCount = followService.findFollowerCount(ENTITY_TYPE_USER, userId);
+    model.addAttribute("followerCount", followerCount);
+
+    // 关注状态
+    boolean followStatus = false;
+    if (hostHolder.getUser() != null) {
+      followStatus =
+          followService.findFollowStatute(hostHolder.getUser().getId(), ENTITY_TYPE_USER, userId);
+    }
+    model.addAttribute("followStatus", followStatus);
 
     return "/site/profile";
   }
