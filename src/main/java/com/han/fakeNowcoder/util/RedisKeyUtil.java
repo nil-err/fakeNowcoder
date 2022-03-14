@@ -8,9 +8,9 @@ public class RedisKeyUtil {
 
   private static final String PREFIX_USER_OBTAINED_LIKE = "liker:user";
 
-  private static final String PERFIX_FOLLOWEE = "followee";
+  private static final String PREFIX_FOLLOWEE = "followee";
 
-  private static final String PERFIX_FOLLOWER = "follower";
+  private static final String PREFIX_FOLLOWER = "follower";
 
   /**
    * 某个实体的赞 <br>
@@ -36,7 +36,7 @@ public class RedisKeyUtil {
    * Value: zset(entityId,now) <br>
    */
   public static String getFolloweeKey(int userId, int entityType) {
-    return PERFIX_FOLLOWEE + SPLIT + userId + SPLIT + entityType;
+    return PREFIX_FOLLOWEE + SPLIT + userId + SPLIT + entityType;
   }
 
   /**
@@ -45,6 +45,6 @@ public class RedisKeyUtil {
    * Value: zset(userId,now) <br>
    */
   public static String getFollowerKey(int entityType, int entityId) {
-    return PERFIX_FOLLOWEE + SPLIT + entityType + SPLIT + entityId;
+    return PREFIX_FOLLOWER + SPLIT + entityType + SPLIT + entityId;
   }
 }
