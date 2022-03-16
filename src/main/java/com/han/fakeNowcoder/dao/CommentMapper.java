@@ -2,6 +2,7 @@ package com.han.fakeNowcoder.dao;
 
 import com.han.fakeNowcoder.entity.Comment;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,11 +21,21 @@ public interface CommentMapper {
    * @param limit
    * @return
    */
-  List<Comment> selectCommentByEntity(int entityType, int entityId, int offset, int limit);
+  List<Comment> selectCommentByEntity(
+      @Param("entityType") int entityType,
+      @Param("entityId") int entityId,
+      @Param("offset") int offset,
+      @Param("limit") int limit);
 
-  int selectCommentRowsByEntity(int entityType, int entityId);
+  int selectCommentRowsByEntity(
+      @Param("entityType") int entityType, @Param("entityId") int entityId);
 
-  int insertCommet(Comment comment);
+  int insertCommet(@Param("comment") Comment comment);
 
-  Comment selectCommentById(int id);
+  Comment selectCommentById(@Param("id") int id);
+
+  List<Comment> selectCommentByUser(
+      @Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);
+
+  int selectCommentRowsByUser(@Param("userId") int userId);
 }

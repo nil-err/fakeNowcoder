@@ -1,10 +1,11 @@
 package com.han.fakeNowcoder.controller;
 
 import com.han.fakeNowcoder.annotation.LoginRequired;
+import com.han.fakeNowcoder.entity.Comment;
+import com.han.fakeNowcoder.entity.DiscussPost;
+import com.han.fakeNowcoder.entity.Page;
 import com.han.fakeNowcoder.entity.User;
-import com.han.fakeNowcoder.service.FollowService;
-import com.han.fakeNowcoder.service.LikeService;
-import com.han.fakeNowcoder.service.UserService;
+import com.han.fakeNowcoder.service.*;
 import com.han.fakeNowcoder.util.CommunityCostant;
 import com.han.fakeNowcoder.util.CommunityUtil;
 import com.han.fakeNowcoder.util.HostHolder;
@@ -25,6 +26,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,6 +52,10 @@ public class UserController implements CommunityCostant {
   @Autowired private UserService userService;
 
   @Autowired private HostHolder hostHolder;
+
+  @Autowired private CommentService commentService;
+
+  @Autowired private DiscussPostService discussPostService;
 
   @Autowired private LikeService likeService;
 
@@ -161,5 +169,67 @@ public class UserController implements CommunityCostant {
     model.addAttribute("followStatus", followStatus);
 
     return "/site/profile";
+  }
+
+  @RequestMapping(path = "/mypost/{userId}", method = RequestMethod.GET)
+  public String getMyDiscussPost(@PathVariable("userId") int userId, Model model, Page page) {
+    // 用户
+    User user = userService.findUserById(userId);
+    if (user == null) {
+      throw new RuntimeException("该用户不存在！");
+    }
+    model.addAttribute("user", user);
+
+    // 分页信息
+    page.setPath("/user/mypost/" + userId);
+    page.setLimit(5);
+    page.setRows(discussPostService.findDiscussPostRows(userId));
+
+    // 帖子列表
+    List<DiscussPost> discussPosts =
+        discussPostService.findDiscussPosts(userId, page.getOffset(), page.getLimit());
+    List<Map<String, Object>> discussPostList = new ArrayList<>();
+    if (discussPosts != null) {
+      for (DiscussPost discussPost : discussPosts) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("discussPost", discussPost);
+        map.put(
+            "likeCount", likeService.findEntityLikeCount(ENTITY_TYPE_POST, discussPost.getId()));
+        discussPostList.add(map);
+      }
+    }
+    model.addAttribute("discussPostList", discussPostList);
+
+    return "/site/my-post";
+  }
+
+  @RequestMapping(path = "/myreply/{userId}", method = RequestMethod.GET)
+  public String getMyReplyPost(@PathVariable("userId") int userId, Model model, Page page) {
+    // 用户
+    User user = userService.findUserById(userId);
+    if (user == null) {
+      throw new RuntimeException("该用户不存在！");
+    }
+    model.addAttribute("user", user);
+
+    // 分页信息
+    page.setPath("/user/myreply/" + userId);
+    page.setLimit(5);
+    page.setRows(commentService.findCommentRowsByUser(userId));
+
+    // 帖子列表
+    List<Comment> comments =
+        commentService.findCommentByUser(userId, page.getOffset(), page.getLimit());
+    List<Map<String, Object>> commentList = new ArrayList<>();
+    if (comments != null) {
+      for (Comment comment : comments) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("comment", comment);
+        map.put("discussPost", discussPostService.findDiscussPostById(comment.getEntityId()));
+        commentList.add(map);
+      }
+    }
+    model.addAttribute("commentList", commentList);
+    return "/site/my-reply";
   }
 }

@@ -57,4 +57,12 @@ public class CommentService implements CommunityCostant {
   public Comment findCommentById(int id) {
     return commentMapper.selectCommentById(id);
   }
+
+  public List<Comment> findCommentByUser(int userId, int offset, int limit) {
+    return commentMapper.selectCommentByUser(userId, offset, limit);
+  }
+
+  public int findCommentRowsByUser(int userId) {
+    return commentMapper.selectCommentRowsByUser(userId);
+  }
 }
