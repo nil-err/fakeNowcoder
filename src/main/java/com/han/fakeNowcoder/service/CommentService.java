@@ -13,6 +13,9 @@ import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
+/**
+ * @author imhan
+ */
 @Service
 public class CommentService implements CommunityCostant {
 
@@ -49,5 +52,9 @@ public class CommentService implements CommunityCostant {
     }
 
     return i;
+  }
+
+  public Comment findCommentById(int id) {
+    return commentMapper.selectCommentById(id);
   }
 }

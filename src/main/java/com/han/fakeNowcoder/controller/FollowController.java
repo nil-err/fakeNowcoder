@@ -1,8 +1,12 @@
 package com.han.fakeNowcoder.controller;
 
 import com.han.fakeNowcoder.annotation.LoginRequired;
+import com.han.fakeNowcoder.entity.Event;
 import com.han.fakeNowcoder.entity.Page;
 import com.han.fakeNowcoder.entity.User;
+import com.han.fakeNowcoder.event.EventProducer;
+import com.han.fakeNowcoder.service.CommentService;
+import com.han.fakeNowcoder.service.DiscussPostService;
 import com.han.fakeNowcoder.service.FollowService;
 import com.han.fakeNowcoder.service.UserService;
 import com.han.fakeNowcoder.util.CommunityCostant;
@@ -28,6 +32,12 @@ public class FollowController implements CommunityCostant {
 
   @Autowired private UserService userService;
 
+  @Autowired private DiscussPostService discussPostService;
+
+  @Autowired private CommentService commentService;
+
+  @Autowired private EventProducer eventProducer;
+
   @LoginRequired
   @RequestMapping(path = "/follow", method = RequestMethod.POST)
   @ResponseBody
@@ -35,6 +45,23 @@ public class FollowController implements CommunityCostant {
     User user = hostHolder.getUser();
 
     followService.follow(user.getId(), entityType, entityId);
+
+    // 触发关注事件
+    Event event =
+        new Event()
+            .setTopic(TOPIC_LIKE)
+            .setUserId(user.getId())
+            .setEntityType(entityType)
+            .setEntityId(entityId);
+    // 目前只能关注人，代码先放着
+    if (entityType == ENTITY_TYPE_POST) {
+      event.setEntityUserId(discussPostService.findDiscussPostById(entityId).getUserId());
+    } else if (entityType == ENTITY_TYPE_COMMENT) {
+      event.setEntityUserId(commentService.findCommentById(entityId).getUserId());
+    } else if (entityType == ENTITY_TYPE_USER) {
+      event.setEntityUserId(entityId);
+    }
+    eventProducer.fireEvent(event);
 
     return CommunityUtil.getJSONString(0, "已关注");
   }
