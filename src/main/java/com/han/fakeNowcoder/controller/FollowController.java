@@ -49,7 +49,7 @@ public class FollowController implements CommunityCostant {
     // 触发关注事件
     Event event =
         new Event()
-            .setTopic(TOPIC_LIKE)
+            .setTopic(TOPIC_FOLLOW)
             .setUserId(user.getId())
             .setEntityType(entityType)
             .setEntityId(entityId);

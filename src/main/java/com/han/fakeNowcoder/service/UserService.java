@@ -176,7 +176,7 @@ public class UserService implements CommunityCostant {
     LoginTicket loginTicket = (LoginTicket) redisTemplate.opsForValue().get(loginTicketKey);
     loginTicket.setStatus(1);
 
-    redisTemplate.opsForValue().set(ticket, loginTicket);
+    redisTemplate.opsForValue().set(loginTicketKey, loginTicket);
   }
 
   public LoginTicket findLoginTicket(String ticket) {

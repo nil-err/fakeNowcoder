@@ -2,6 +2,7 @@ package com.han.fakeNowcoder.config;
 
 import com.han.fakeNowcoder.controller.interceptor.LoginRequiredInterceptor;
 import com.han.fakeNowcoder.controller.interceptor.LoginTicketInterceptor;
+import com.han.fakeNowcoder.controller.interceptor.MessageCountInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -14,6 +15,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
   @Autowired private LoginRequiredInterceptor loginRequiredInterceptor;
 
+  @Autowired private MessageCountInterceptor messageCountInterceptor;
+
   //  @Autowired private AlphaInterceptor alphaInterceptor;
 
   @Override
@@ -24,6 +27,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     registry
         .addInterceptor(loginRequiredInterceptor)
+        .excludePathPatterns("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg");
+
+    registry
+        .addInterceptor(messageCountInterceptor)
         .excludePathPatterns("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg");
   }
 }

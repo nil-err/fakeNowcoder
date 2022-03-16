@@ -58,4 +58,30 @@ public class MessageService {
   public int deleteMessage(int id) {
     return messageMapper.updateStatus(Arrays.asList(new Integer[] {id}), 2);
   }
+
+  /** 查询某个主题下最新的通知 */
+  public Message findLatestMessage(int userId, String conversationId) {
+    return messageMapper.selectLatestMessage(userId, conversationId);
+  }
+
+  /**
+   * 查询某个主题的通知数量 <br>
+   * 可以直接用 查询未读私信数量实现 selectMessagesCount
+   */
+  public int findNoticeCount(int userId, String topic) {
+    return messageMapper.selectNoticeCount(userId, topic);
+  }
+
+  /**
+   * 查询某个主题未读通知数量 <br>
+   * 可以直接用 查询未读私信数量实现 selectUnreadMessagesCount
+   */
+  public int findUnreadNoticeCount(int userId, String topic) {
+    return messageMapper.selectUnreadNoticeCount(userId, topic);
+  }
+
+  /** 查询某个主题通知列表 */
+  public List<Message> findNotices(int userId, String conversationId, int offset, int limit) {
+    return messageMapper.selectNotices(userId, conversationId, offset, limit);
+  }
 }

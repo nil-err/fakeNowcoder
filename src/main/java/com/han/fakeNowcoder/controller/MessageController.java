@@ -62,9 +62,12 @@ public class MessageController {
     model.addAttribute("conversationList", conversationList);
 
     // 未读消息总数
-    int allUnreadMessageCount = messageService.findUnreadMessagesCount(user.getId(), null);
+    int unreadMessagesCount = messageService.findUnreadMessagesCount(user.getId(), null);
+    model.addAttribute("unreadMessagesCount", unreadMessagesCount);
 
-    model.addAttribute("allUnreadMessageCount", allUnreadMessageCount);
+    // 查询未读通知数量
+    int unreadNoticeCount = messageService.findUnreadNoticeCount(user.getId(), null);
+    model.addAttribute("unreadNoticeCount", unreadNoticeCount);
 
     return "/site/letter";
   }

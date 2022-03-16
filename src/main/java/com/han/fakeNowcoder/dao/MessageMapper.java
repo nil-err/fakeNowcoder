@@ -34,4 +34,27 @@ public interface MessageMapper {
 
   /** 修改消息状态 */
   int updateStatus(@Param("ids") List<Integer> ids, @Param("status") int status);
+
+  /** 查询某个主题下最新的通知 */
+  Message selectLatestMessage(
+      @Param("userId") int userId, @Param("conversationId") String conversationId);
+
+  /**
+   * 查询某个主题的通知数量 <br>
+   * 可以直接用 查询未读私信数量实现 selectMessagesCount
+   */
+  int selectNoticeCount(@Param("userId") int userId, @Param("topic") String topic);
+
+  /**
+   * 查询某个主题未读通知数量 <br>
+   * 可以直接用 查询未读私信数量实现 selectUnreadMessagesCount
+   */
+  int selectUnreadNoticeCount(@Param("userId") int userId, @Param("topic") String topic);
+
+  /** 查询某个主题通知列表 */
+  List<Message> selectNotices(
+      @Param("userId") int userId,
+      @Param("conversationId") String conversationId,
+      @Param("offset") int offset,
+      @Param("limit") int limit);
 }
