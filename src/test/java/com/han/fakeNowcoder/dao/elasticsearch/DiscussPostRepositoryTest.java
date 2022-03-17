@@ -48,31 +48,9 @@ class DiscussPostRepositoryTest {
 
   @Test
   public void testInsertList() {
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(101, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(102, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(103, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(104, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(105, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(106, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(107, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(108, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(109, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(110, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(111, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(112, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(113, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(114, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(115, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(116, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(117, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(118, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(119, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(120, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(121, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(122, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(123, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(124, 0, 100));
-    discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(125, 0, 100));
+    for (int i = 1; i < 200; i++) {
+      discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(i, 0, 100));
+    }
   }
 
   @Test

@@ -18,7 +18,8 @@ public interface DiscussPostMapper {
    * @param limit 每页显示多少行，用于开发分页插件
    * @return
    */
-  List<DiscussPost> selectDiscussPosts(int userId, int offset, int limit);
+  List<DiscussPost> selectDiscussPosts(
+      @Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);
 
   /**
    * @param userId 如果某个SQL使用动态的参数SQL中使用<if>，并且只有一个参数，那么必须取别名

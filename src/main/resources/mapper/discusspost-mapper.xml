@@ -48,10 +48,11 @@
         </if>
     </select>
 
-    <insert id="insertDiscussPost" parameterType="com.han.fakeNowcoder.entity.DiscussPost" keyProperty="id">
+    <insert id="insertDiscussPost" parameterType="DiscussPost" keyProperty="id">
         insert into discuss_post (<include refid="insertFields">
     </include>)
-        values (#{userId}, #{title}, #{content}, #{type}, #{status}, #{createTime}, #{commentCount}, #{score})
+        values (#{discussPost.userId}, #{discussPost.title}, #{discussPost.content}, #{discussPost.type},
+        #{discussPost.status}, #{discussPost.createTime}, #{discussPost.commentCount}, #{discussPost.score})
     </insert>
 
     <select id="selectDiscussPostById" parameterType="int" resultType="com.han.fakeNowcoder.entity.DiscussPost">

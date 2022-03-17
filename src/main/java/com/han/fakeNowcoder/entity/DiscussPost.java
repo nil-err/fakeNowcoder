@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Setting;
 
 import java.util.Date;
 
@@ -11,7 +12,8 @@ import java.util.Date;
  * @author imhan
  */
 /*@Document(indexName = "discusspost", type = "_doc", shards = 6, replicas = 3)*/
-@Document(indexName = "discusspost", shards = 6, replicas = 3)
+@Setting(shards = 6, replicas = 3)
+@Document(indexName = "discusspost")
 public class DiscussPost {
 
   @Id private int id;

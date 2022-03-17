@@ -1,10 +1,8 @@
 package com.han.fakeNowcoder.controller;
 
 import com.han.fakeNowcoder.annotation.LoginRequired;
-import com.han.fakeNowcoder.entity.Comment;
-import com.han.fakeNowcoder.entity.DiscussPost;
-import com.han.fakeNowcoder.entity.Page;
-import com.han.fakeNowcoder.entity.User;
+import com.han.fakeNowcoder.entity.*;
+import com.han.fakeNowcoder.event.EventProducer;
 import com.han.fakeNowcoder.service.CommentService;
 import com.han.fakeNowcoder.service.DiscussPostService;
 import com.han.fakeNowcoder.service.LikeService;
@@ -36,6 +34,8 @@ public class DiscussPostController implements CommunityCostant {
 
   @Autowired private LikeService likeService;
 
+  @Autowired private EventProducer eventProducer;
+
   @LoginRequired
   @RequestMapping(path = "/add", method = RequestMethod.POST)
   @ResponseBody
@@ -55,6 +55,15 @@ public class DiscussPostController implements CommunityCostant {
     discussPost.setCommentCount(0);
     discussPost.setScore(0);
     discussPostService.addDiscussPost(discussPost);
+
+    // 触发发帖事件
+    Event event =
+        new Event()
+            .setTopic(TOPIC_PUBLISH)
+            .setUserId(user.getId())
+            .setEntityType(ENTITY_TYPE_POST)
+            .setEntityId(discussPost.getId());
+    eventProducer.fireEvent(event);
 
     // 程序出错情况，之后统一处理
 

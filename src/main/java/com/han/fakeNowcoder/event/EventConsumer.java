@@ -1,8 +1,11 @@
 package com.han.fakeNowcoder.event;
 
 import com.alibaba.fastjson.JSONObject;
+import com.han.fakeNowcoder.entity.DiscussPost;
 import com.han.fakeNowcoder.entity.Event;
 import com.han.fakeNowcoder.entity.Message;
+import com.han.fakeNowcoder.service.DiscussPostService;
+import com.han.fakeNowcoder.service.ElasticSearchService;
 import com.han.fakeNowcoder.service.MessageService;
 import com.han.fakeNowcoder.util.CommunityCostant;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -25,6 +28,10 @@ public class EventConsumer implements CommunityCostant {
   public static final Logger logger = LoggerFactory.getLogger(EventConsumer.class);
 
   @Autowired private MessageService messageService;
+
+  @Autowired private DiscussPostService discussPostService;
+
+  @Autowired private ElasticSearchService elasticSearchService;
 
   @KafkaListener(topics = {TOPIC_COMMENT, TOPIC_LIKE, TOPIC_FOLLOW})
   public void handleMessageOfCommentLikeAndFollow(ConsumerRecord record) {
@@ -61,5 +68,24 @@ public class EventConsumer implements CommunityCostant {
     message.setContent(JSONObject.toJSONString(content));
 
     messageService.addMessage(message);
+  }
+
+  // 消费发帖事件
+  @KafkaListener(topics = {TOPIC_PUBLISH})
+  public void handlePublishDiscussPost(ConsumerRecord record) {
+    if (record == null || record.value() == null) {
+      logger.error("消息内容为空！");
+      return;
+    }
+
+    Event event = JSONObject.parseObject(record.value().toString(), Event.class);
+
+    if (event == null) {
+      logger.error("消息格式有误！");
+      return;
+    }
+
+    DiscussPost discussPost = discussPostService.findDiscussPostById(event.getEntityId());
+    elasticSearchService.saveDiscussPost(discussPost);
   }
 }
