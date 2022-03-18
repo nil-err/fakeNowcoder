@@ -39,8 +39,8 @@ public class ElasticSearchService {
     discussPostRepository.save(discussPost);
   }
 
-  public void deleteDiscussPost(DiscussPost discussPost) {
-    discussPostRepository.deleteById(discussPost.getId());
+  public void deleteDiscussPost(int discussPostId) {
+    discussPostRepository.deleteById(discussPostId);
   }
 
   public SearchResult searchDiscussPost(String keyword, int current, int limit) throws IOException {

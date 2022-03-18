@@ -1,3 +1,9 @@
+$(function () {
+    $("#topBtn").click(setTop);
+    $("#wonderfulBtn").click(setWonderful);
+    $("#deleteBtn").click(setDelete);
+});
+
 function like(btn, entityType, entityId, entityUserId, discussPostId) {
     $.post(
         CONTEXT_PATH + "/like",
@@ -11,6 +17,51 @@ function like(btn, entityType, entityId, entityUserId, discussPostId) {
                 } else {
                     $(btn).children("b").text("已赞");
                 }
+            } else {
+                alert(data.msg);
+            }
+        }
+    )
+}
+
+function setTop() {
+    $.post(
+        CONTEXT_PATH + "/discuss/top",
+        {"id": $("#discussPosyId").val()},
+        function (data) {
+            data = $.parseJSON(data);
+            if (data.code == 0) {
+                $("#topBtn").attr("disabled", "disabled")
+            } else {
+                alert(data.msg);
+            }
+        }
+    )
+}
+
+function setWonderful() {
+    $.post(
+        CONTEXT_PATH + "/discuss/wonderful",
+        {"id": $("#discussPosyId").val()},
+        function (data) {
+            data = $.parseJSON(data);
+            if (data.code == 0) {
+                $("#wonderfulBtn").attr("disabled", "disabled")
+            } else {
+                alert(data.msg);
+            }
+        }
+    )
+}
+
+function setDelete() {
+    $.post(
+        CONTEXT_PATH + "/discuss/delete",
+        {"id": $("#discussPosyId").val()},
+        function (data) {
+            data = $.parseJSON(data);
+            if (data.code == 0) {
+                location.href = CONTEXT_PATH + "/index";
             } else {
                 alert(data.msg);
             }
