@@ -40,8 +40,10 @@ public class NoticeController implements CommunityCostant {
 
     // 查询评论类通知
     Message latestMessage = messageService.findLatestMessage(user.getId(), TOPIC_COMMENT);
-    Map<String, Object> messageVo = new HashMap<>();
     if (latestMessage != null) {
+
+      Map<String, Object> messageVo = new HashMap<>();
+
       messageVo.put("message", latestMessage);
 
       String content = latestMessage.getContent();
@@ -58,14 +60,16 @@ public class NoticeController implements CommunityCostant {
 
       int unreadNoticeCount = messageService.findUnreadNoticeCount(user.getId(), TOPIC_COMMENT);
       messageVo.put("unreadNoticeCount", unreadNoticeCount);
-    }
 
-    model.addAttribute("commentNotice", messageVo);
+      model.addAttribute("commentNotice", messageVo);
+    }
 
     // 查询点赞类通知
     latestMessage = messageService.findLatestMessage(user.getId(), TOPIC_LIKE);
-    messageVo = new HashMap<>();
     if (latestMessage != null) {
+
+      Map<String, Object> messageVo = new HashMap<>();
+
       messageVo.put("message", latestMessage);
 
       String content = latestMessage.getContent();
@@ -82,14 +86,16 @@ public class NoticeController implements CommunityCostant {
 
       int unreadNoticeCount = messageService.findUnreadNoticeCount(user.getId(), TOPIC_LIKE);
       messageVo.put("unreadNoticeCount", unreadNoticeCount);
-    }
 
-    model.addAttribute("likeNotice", messageVo);
+      model.addAttribute("likeNotice", messageVo);
+    }
 
     // 查询关注类通知
     latestMessage = messageService.findLatestMessage(user.getId(), TOPIC_FOLLOW);
-    messageVo = new HashMap<>();
     if (latestMessage != null) {
+
+      Map<String, Object> messageVo = new HashMap<>();
+
       messageVo.put("message", latestMessage);
 
       String content = latestMessage.getContent();
@@ -105,9 +111,9 @@ public class NoticeController implements CommunityCostant {
 
       int unreadNoticeCount = messageService.findUnreadNoticeCount(user.getId(), TOPIC_FOLLOW);
       messageVo.put("unreadNoticeCount", unreadNoticeCount);
-    }
 
-    model.addAttribute("followNotice", messageVo);
+      model.addAttribute("followNotice", messageVo);
+    }
 
     // 查询未读通知数量
     int unreadNoticeCount = messageService.findUnreadNoticeCount(user.getId(), null);

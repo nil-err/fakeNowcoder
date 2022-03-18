@@ -45,11 +45,12 @@
         and entity_id = #{entityId}
     </select>
 
-    <insert id="insertCommet" parameterType="Comment">
+    <insert id="insertCommet" parameterType="Comment" keyProperty="comment.id">
         insert into comment
         (<include refid="insertFields">
     </include>)
-        values (#{userId}, #{entityType}, #{entityId}, #{targetId}, #{content}, #{status}, #{createTime})
+        values (#{comment.userId}, #{comment.entityType}, #{comment.entityId}, #{comment.targetId}, #{comment.content},
+        #{comment.status}, #{comment.createTime})
     </insert>
 
     <select id="selectCommentById" resultType="Comment">
