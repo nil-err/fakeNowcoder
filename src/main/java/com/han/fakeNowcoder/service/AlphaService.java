@@ -6,7 +6,10 @@ import com.han.fakeNowcoder.dao.UserMapper;
 import com.han.fakeNowcoder.entity.DiscussPost;
 import com.han.fakeNowcoder.entity.User;
 import com.han.fakeNowcoder.util.CommunityUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -24,6 +27,7 @@ import java.util.Date;
 @Service
 // @Scope("prototype")
 public class AlphaService {
+  public static final Logger logger = LoggerFactory.getLogger(AlphaService.class);
 
   @Autowired private AlphaDao alphaDao;
 
@@ -117,5 +121,16 @@ public class AlphaService {
             return "ok";
           }
         });
+  }
+
+  // Spring线程池的简便方式
+  @Async // 注解让该方法再多线程环境下，被异步地调用
+  public void execute1() {
+    logger.debug("execute1");
+  }
+
+  //  @Scheduled(initialDelay = 10000, fixedRate = 1000)
+  public void execute2() {
+    logger.debug("execute2");
   }
 }
