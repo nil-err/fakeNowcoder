@@ -187,7 +187,7 @@ public class UserController implements CommunityCostant {
 
     // 帖子列表
     List<DiscussPost> discussPosts =
-        discussPostService.findDiscussPosts(userId, page.getOffset(), page.getLimit());
+        discussPostService.findDiscussPosts(userId, page.getOffset(), page.getLimit(), 0);
     List<Map<String, Object>> discussPostList = new ArrayList<>();
     if (discussPosts != null) {
       for (DiscussPost discussPost : discussPosts) {

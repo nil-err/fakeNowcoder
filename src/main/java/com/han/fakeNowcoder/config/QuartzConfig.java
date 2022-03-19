@@ -1,8 +1,10 @@
 package com.han.fakeNowcoder.config;
 
 import com.han.fakeNowcoder.quartz.AlphaJob;
+import com.han.fakeNowcoder.quartz.DiscussPostScoreRefreshJob;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
@@ -18,7 +20,7 @@ public class QuartzConfig {
 
   // 配置JobDetail
   //  @Bean
-  public JobDetailFactoryBean aplhaJobDetail() {
+  public JobDetailFactoryBean alphaJobDetail() {
     JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
     factoryBean.setJobClass(AlphaJob.class);
     factoryBean.setName("AlphaJob");
@@ -28,14 +30,38 @@ public class QuartzConfig {
     return factoryBean;
   }
 
-  // 篇日志Trigger(SimpleTriggerFactoryBean, CronTriggerFactoryBean)
+  // 配置Trigger(SimpleTriggerFactoryBean, CronTriggerFactoryBean)
   //  @Bean
-  public SimpleTriggerFactoryBean simpleTriggerFactoryBean(JobDetail aplhaJobDetail) {
+  public SimpleTriggerFactoryBean simpleTriggerFactoryBean(JobDetail alphaJobDetail) {
     SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
-    factoryBean.setJobDetail(aplhaJobDetail);
+    factoryBean.setJobDetail(alphaJobDetail);
     factoryBean.setName("alphaTrigger");
     factoryBean.setGroup("alphaTriggerGroup");
     factoryBean.setRepeatInterval(3000);
+    factoryBean.setJobDataAsMap(new JobDataMap());
+    return factoryBean;
+  }
+
+  // 配置JobDetail
+  @Bean
+  public JobDetailFactoryBean discussPostScoreRefreshJobDetail() {
+    JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
+    factoryBean.setJobClass(DiscussPostScoreRefreshJob.class);
+    factoryBean.setName("discussPostScoreRefreshJob");
+    factoryBean.setGroup("communityJobGroup");
+    factoryBean.setDurability(true);
+    factoryBean.setRequestsRecovery(true);
+    return factoryBean;
+  }
+
+  @Bean
+  public SimpleTriggerFactoryBean discussPostScoreRefreshTriggerFactoryBean(
+      JobDetail discussPostScoreRefreshJobDetail) {
+    SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
+    factoryBean.setJobDetail(discussPostScoreRefreshJobDetail);
+    factoryBean.setName("discussPostScoreRefreshTrigger");
+    factoryBean.setGroup("communityTriggerGroup");
+    factoryBean.setRepeatInterval(1000 * 60);
     factoryBean.setJobDataAsMap(new JobDataMap());
     return factoryBean;
   }

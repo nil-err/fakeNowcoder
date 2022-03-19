@@ -19,7 +19,10 @@ public interface DiscussPostMapper {
    * @return
    */
   List<DiscussPost> selectDiscussPosts(
-      @Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);
+      @Param("userId") int userId,
+      @Param("offset") int offset,
+      @Param("limit") int limit,
+      @Param("orderMode") int orderMode);
 
   /**
    * @param userId 如果某个SQL使用动态的参数SQL中使用<if>，并且只有一个参数，那么必须取别名
@@ -36,4 +39,6 @@ public interface DiscussPostMapper {
   int updateType(@Param("id") int id, @Param("type") int type);
 
   int updateStatus(@Param("id") int id, @Param("status") int status);
+
+  int updateScore(@Param("id") int id, @Param("score") double score);
 }

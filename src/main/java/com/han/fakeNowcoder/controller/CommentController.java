@@ -9,7 +9,9 @@ import com.han.fakeNowcoder.service.CommentService;
 import com.han.fakeNowcoder.service.DiscussPostService;
 import com.han.fakeNowcoder.util.CommunityCostant;
 import com.han.fakeNowcoder.util.HostHolder;
+import com.han.fakeNowcoder.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +34,8 @@ public class CommentController implements CommunityCostant {
   @Autowired private DiscussPostService discussPostService;
 
   @Autowired private EventProducer eventProducer;
+
+  @Autowired private RedisTemplate redisTemplate;
 
   @LoginRequired
   @RequestMapping(path = "/add/{discussPostId}", method = RequestMethod.POST)
@@ -72,6 +76,13 @@ public class CommentController implements CommunityCostant {
               .setEntityType(ENTITY_TYPE_POST)
               .setEntityId(discussPostId);
       eventProducer.fireEvent(event);
+    }
+
+    // 如果评论了帖子，就修改了帖子的评论数量，需要计算分数
+    if (comment.getEntityType() == ENTITY_TYPE_POST) {
+      // 计算帖子分数
+      String postScoreKey = RedisKeyUtil.getPostScoreKey();
+      redisTemplate.opsForSet().add(postScoreKey, discussPostId);
     }
 
     return "redirect:/discuss/detail/" + discussPostId;

@@ -10,7 +10,9 @@ import com.han.fakeNowcoder.service.UserService;
 import com.han.fakeNowcoder.util.CommunityCostant;
 import com.han.fakeNowcoder.util.CommunityUtil;
 import com.han.fakeNowcoder.util.HostHolder;
+import com.han.fakeNowcoder.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +37,8 @@ public class DiscussPostController implements CommunityCostant {
   @Autowired private LikeService likeService;
 
   @Autowired private EventProducer eventProducer;
+
+  @Autowired private RedisTemplate redisTemplate;
 
   @LoginRequired
   @RequestMapping(path = "/add", method = RequestMethod.POST)
@@ -64,6 +68,10 @@ public class DiscussPostController implements CommunityCostant {
             .setEntityType(ENTITY_TYPE_POST)
             .setEntityId(discussPost.getId());
     eventProducer.fireEvent(event);
+
+    // 计算帖子分数
+    String postScoreKey = RedisKeyUtil.getPostScoreKey();
+    redisTemplate.opsForSet().add(postScoreKey, discussPost.getId());
 
     // 程序出错情况，之后统一处理
 
@@ -205,6 +213,10 @@ public class DiscussPostController implements CommunityCostant {
             .setEntityType(ENTITY_TYPE_POST)
             .setEntityId(id);
     eventProducer.fireEvent(event);
+
+    // 计算帖子分数
+    String postScoreKey = RedisKeyUtil.getPostScoreKey();
+    redisTemplate.opsForSet().add(postScoreKey, id);
 
     return CommunityUtil.getJSONString(0);
   }

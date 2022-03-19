@@ -8,7 +8,9 @@ import com.han.fakeNowcoder.service.LikeService;
 import com.han.fakeNowcoder.util.CommunityCostant;
 import com.han.fakeNowcoder.util.CommunityUtil;
 import com.han.fakeNowcoder.util.HostHolder;
+import com.han.fakeNowcoder.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +27,8 @@ public class LikeController implements CommunityCostant {
   @Autowired private LikeService likeService;
 
   @Autowired private EventProducer eventProducer;
+
+  @Autowired private RedisTemplate redisTemplate;
 
   @LoginRequired
   @RequestMapping(path = "/like", method = RequestMethod.POST)
@@ -53,6 +57,13 @@ public class LikeController implements CommunityCostant {
               .setEntityUserId(entityUserId)
               .setData("discussPostId", discussPostId);
       eventProducer.fireEvent(event);
+    }
+
+    // 如果点赞了帖子，就修改了帖子的点赞数量，需要计算分数
+    if (entityType == ENTITY_TYPE_POST) {
+      // 计算帖子分数
+      String postScoreKey = RedisKeyUtil.getPostScoreKey();
+      redisTemplate.opsForSet().add(postScoreKey, discussPostId);
     }
 
     return CommunityUtil.getJSONString(0, "操作成功", map);

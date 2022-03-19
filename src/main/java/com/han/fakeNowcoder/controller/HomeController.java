@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,17 +36,18 @@ public class HomeController implements CommunityCostant {
   @Autowired private LikeService likeService;
 
   @RequestMapping(path = "/index", method = RequestMethod.GET)
-  public String getIndexPage(Model model, Page page) {
+  public String getIndexPage(
+      Model model, Page page, @RequestParam(name = "orderMode", defaultValue = "0") int orderMode) {
     /*
      方法调用之前，SpringMVC会自动实例化Model和Page，并自动将Page诸如Model
      因此，在thymeleaf中可以直接访问Page对象，无需手动将Page对象注入Model
      即 model.addAttribute("page", page);
     */
     page.setRows(discussPostService.findDiscussPostRows(0));
-    page.setPath("/index");
+    page.setPath("/index?orderMode=" + orderMode);
 
     List<DiscussPost> list =
-        discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
+        discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit(), orderMode);
     List<Map<String, Object>> discussPosts = new ArrayList<>();
     if (list != null) {
       for (DiscussPost discussPost : list) {
@@ -59,6 +61,7 @@ public class HomeController implements CommunityCostant {
       }
     }
     model.addAttribute("discussPosts", discussPosts);
+    model.addAttribute("orderMode", orderMode);
     return "/index";
   }
 

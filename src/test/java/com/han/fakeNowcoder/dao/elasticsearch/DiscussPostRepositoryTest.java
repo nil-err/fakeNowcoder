@@ -49,7 +49,7 @@ class DiscussPostRepositoryTest {
   @Test
   public void testInsertList() {
     for (int i = 1; i < 200; i++) {
-      discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(i, 0, 100));
+      discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(i, 0, 100, 0));
     }
   }
 
