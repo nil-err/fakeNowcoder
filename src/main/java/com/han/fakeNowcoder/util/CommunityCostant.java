@@ -34,6 +34,8 @@ public interface CommunityCostant {
   String TOPIC_PUBLISH = "publish";
   /** 主题：删帖 */
   String TOPIC_DELETE = "delete";
+  /** 主题：分享 */
+  String TOPIC_SHARE = "share";
 
   /** 系统用户ID */
   int SYSTEM_USER_ID = 1;

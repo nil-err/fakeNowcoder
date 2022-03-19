@@ -12,9 +12,11 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +34,12 @@ public class EventConsumer implements CommunityCostant {
   @Autowired private DiscussPostService discussPostService;
 
   @Autowired private ElasticSearchService elasticSearchService;
+
+  @Value("${wk.image.storage}")
+  private String wkImageStorage;
+
+  @Value("${wk.image.command}")
+  private String wkImageCommand;
 
   @KafkaListener(topics = {TOPIC_COMMENT, TOPIC_LIKE, TOPIC_FOLLOW})
   public void handleMessageOfCommentLikeAndFollow(ConsumerRecord record) {
@@ -104,5 +112,43 @@ public class EventConsumer implements CommunityCostant {
     }
 
     elasticSearchService.deleteDiscussPost(event.getEntityId());
+  }
+
+  // 消费分享事件
+  @KafkaListener(topics = {TOPIC_SHARE})
+  public void handleShareMessage(ConsumerRecord record) {
+    if (record == null || record.value() == null) {
+      logger.error("消息内容为空！");
+      return;
+    }
+
+    Event event = JSONObject.parseObject(record.value().toString(), Event.class);
+
+    if (event == null) {
+      logger.error("消息格式有误！");
+      return;
+    }
+
+    Map<String, Object> data = event.getData();
+    String htmlUrl = (String) data.get("htmlUrl");
+    String filename = (String) data.get("filename");
+    String suffix = (String) data.get("suffix");
+
+    String command =
+        wkImageCommand
+            + " --quality 75 "
+            + htmlUrl
+            + " "
+            + wkImageStorage
+            + "/"
+            + filename
+            + suffix;
+
+    try {
+      Runtime.getRuntime().exec(command);
+      logger.info("生成图片成功 ： " + command);
+    } catch (IOException e) {
+      logger.error("生成图片失败 ： " + e.getMessage());
+    }
   }
 }
