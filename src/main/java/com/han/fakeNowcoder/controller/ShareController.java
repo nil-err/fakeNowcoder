@@ -39,6 +39,9 @@ public class ShareController implements CommunityCostant {
   @Value("${wk.image.storage}")
   private String wkImageStorage;
 
+  @Value("${qiniu.bucket.share.url}")
+  private String shareBucketUrl;
+
   @RequestMapping(path = "/share", method = RequestMethod.GET)
   @ResponseBody
   public String share(String htmlUrl) {
@@ -56,13 +59,24 @@ public class ShareController implements CommunityCostant {
 
     // 返回访问路径
     Map<String, Object> map = new HashMap<>();
-    map.put("shareUrl", domain + contextPath + "/share/image/" + filename);
+    /*map.put("shareUrl", domain + contextPath + "/share/image/" + filename);*/
+    // 重构返回的路径
+    map.put("shareUrl", shareBucketUrl + "/" + filename);
 
     return CommunityUtil.getJSONString(0, null, map);
   }
 
+  /**
+   * 获取分享长图
+   *
+   * @param filename
+   * @param response
+   */
+  // 废弃
+  @Deprecated
   @RequestMapping(path = "/share/image/{filename}", method = RequestMethod.GET)
-  public void getHeader(@PathVariable("filename") String filename, HttpServletResponse response) {
+  public void getShareImage(
+      @PathVariable("filename") String filename, HttpServletResponse response) {
     if (StringUtils.isBlank(filename)) {
       throw new IllegalArgumentException("文件名不能为空");
     }
