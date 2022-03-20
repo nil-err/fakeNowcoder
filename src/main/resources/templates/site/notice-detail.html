@@ -98,18 +98,18 @@
                             用户
                             <i th:utext="${map.user.username}">nowcoder</i> 评论了你的
                             <b th:text="${map.entityType==1?'帖子':'回复'}">帖子</b>,
-                            <a class="text-primary" th:href="|/nowcoder/discuss/detail/${map.discussPostId}|">点击查看</a> !
+                            <a class="text-primary" th:href="|/discuss/detail/${map.discussPostId}|">点击查看</a> !
                             </span>
                             <span th:if="${topic.equals('like')}">
                             用户
                             <i th:utext="${map.user.username}">nowcoder</i> 点赞了你的
                             <b th:text="${map.entityType==1?'帖子':'回复'}">帖子</b>,
-                            <a class="text-primary" th:href="|/nowcoder/discuss/detail/${map.discussPostId}|">点击查看</a> !
+                            <a class="text-primary" th:href="|/discuss/detail/${map.discussPostId}|">点击查看</a> !
                             </span>
                             <span th:if="${topic.equals('follow')}">
                             用户
                             <i th:utext="${map.user.username}">nowcoder</i> 关注了你,
-                            <a class="text-primary" th:href="|/nowcoder/user/profile/${map.user.id}|">点击查看</a> !
+                            <a class="text-primary" th:href="|/user/profile/${map.user.id}|">点击查看</a> !
                             </span>
                         </div>
                     </div>

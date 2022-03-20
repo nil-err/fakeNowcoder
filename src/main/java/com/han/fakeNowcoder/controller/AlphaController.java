@@ -142,7 +142,7 @@ public class AlphaController {
     // 创建cookie
     Cookie cookie = new Cookie("code", CommunityUtil.generateUUID());
     // 设置作用域
-    cookie.setPath("/nowcoder/alpha");
+    cookie.setPath("/alpha");
     // 设置生存时间(s)
     cookie.setMaxAge(600);
     // responde 添加Cookie
