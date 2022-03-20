@@ -2,6 +2,7 @@ package com.han.fakeNowcoder.config;
 
 import com.han.fakeNowcoder.quartz.AlphaJob;
 import com.han.fakeNowcoder.quartz.DiscussPostScoreRefreshJob;
+import com.han.fakeNowcoder.quartz.WKImageDeleteJob;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.springframework.context.annotation.Bean;
@@ -63,6 +64,30 @@ public class QuartzConfig {
     factoryBean.setGroup("communityTriggerGroup");
     factoryBean.setRepeatInterval(1000 * 60);
     factoryBean.setJobDataAsMap(new JobDataMap());
+    return factoryBean;
+  }
+
+  // 删除WK图片任务
+  @Bean
+  public JobDetailFactoryBean wkImageDeleteJobDetail() {
+    JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
+    factoryBean.setJobClass(WKImageDeleteJob.class);
+    factoryBean.setName("wkImageDeleteJob");
+    factoryBean.setGroup("communityJobGroup");
+    factoryBean.setDurability(true);
+    factoryBean.setRequestsRecovery(true);
+    return factoryBean;
+  }
+
+  // 删除WK图片触发器
+  @Bean
+  public SimpleTriggerFactoryBean wkImageDeleteTrigger(JobDetail wkImageDeleteJobDetail) {
+    SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
+    factoryBean.setJobDetail(wkImageDeleteJobDetail);
+    factoryBean.setName("wkImageDeleteTrigger");
+    factoryBean.setGroup("communityTriggerGroup");
+    factoryBean.setRepeatInterval(1000 * 60 * 4);
+    factoryBean.setJobDataMap(new JobDataMap());
     return factoryBean;
   }
 }
